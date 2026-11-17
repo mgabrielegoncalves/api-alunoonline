@@ -1,20 +1,20 @@
-# 🎓 API Aluno Online
+#  API Aluno Online
 
 API REST desenvolvida em **Java 21** e **Spring Boot 4**, voltada ao gerenciamento de informações acadêmicas. Possui operações CRUD para alunos, professores e disciplinas, gerenciamento de matrículas, controle de acesso com autenticação **JWT (JSON Web Token)**, criptografia de senhas com **BCrypt**, migrações com **Flyway** e documentação interativa com **Swagger OpenAPI**.
 
 ---
 
-## 🚀 Acesso Rápido à Documentação (Swagger UI)
+##  Acesso Rápido à Documentação (Swagger UI)
 
 Com a aplicação em execução, acesse a documentação interativa para visualizar e testar os endpoints diretamente pelo navegador:
 
-👉 **[Swagger UI](http://localhost:8080/swagger-ui/index.html)**
+ **[Swagger UI](http://localhost:8080/swagger-ui/index.html)**
 
 **Especificação OpenAPI (JSON):** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
 ---
 
-## 🔐 Como se autenticar no Swagger
+##  Como se autenticar no Swagger
 
 A API utiliza autenticação Stateless via JWT para proteger as rotas de gerenciamento acadêmico.
 
@@ -40,7 +40,7 @@ Para testar os endpoints protegidos:
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Java 21** – Linguagem de programação.
 - **Spring Boot 4.0.4** – Estrutura principal da aplicação.
@@ -55,9 +55,9 @@ Para testar os endpoints protegidos:
 
 ---
 
-## 📌 Principais pontos de extremidade
+##  Principais pontos de extremidade
 
-### 🔑 Autenticação e Usuários
+###  Autenticação e Usuários
 
 Rotas públicas utilizadas para cadastro e autenticação.
 
@@ -66,7 +66,7 @@ Rotas públicas utilizadas para cadastro e autenticação.
 | `POST` | `/cadastros` | Cadastra um novo usuário com senha protegida por BCrypt. |
 | `POST` | `/login` | Autentica o usuário e gera um token JWT. |
 
-### 👨‍🏫 Professores (Requer Token JWT)
+### Professores (Requer Token JWT)
 
 | Método | Endpoint | Descrição |
 |---|---|---|
@@ -86,7 +86,7 @@ Rotas públicas utilizadas para cadastro e autenticação.
 | `PUT` | `/alunos/{id}` | Atualiza os dados de um aluno. |
 | `DELETE` | `/alunos/{id}` | Remove um aluno. |
 
-### 📚 Disciplinas (Requer Token JWT)
+### Disciplinas (Requer Token JWT)
 
 | Método | Endpoint | Descrição |
 |---|---|---|
@@ -96,7 +96,7 @@ Rotas públicas utilizadas para cadastro e autenticação.
 | `PUT` | `/disciplinas/{id}` | Atualiza os dados de uma disciplina. |
 | `DELETE` | `/disciplinas/{id}` | Remove uma disciplina. |
 
-### 📝 Matrículas (Requer Token JWT)
+### Matrículas (Requer Token JWT)
 
 | Método | Endpoint | Descrição |
 |---|---|---|
@@ -106,7 +106,7 @@ Rotas públicas utilizadas para cadastro e autenticação.
 
 ---
 
-## ⚙️ Configuração e Execução
+## Configuração e Execução
 
 ### 1. Pré-requisitos
 
