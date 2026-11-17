@@ -1,270 +1,156 @@
-# 🎓 API - Sistema Acadêmico (Aluno Online)
-<p align="center">
+# 🎓 API Aluno Online
 
-<img src="https://img.shields.io/badge/Java-21-F89820?style=for-the-badge&logo=java&logoColor=white"/>
-
-<img src="https://img.shields.io/badge/Spring_Boot-4.x-6DB33F?style=for-the-badge&logo=spring&logoColor=white"/>
-
-<img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/>
-
-<img src="https://img.shields.io/badge/Status-Concluído-27ae60?style=for-the-badge&logo=check&logoColor=white"/>
-
-</p>
-
-
-## 📌 Sobre o Projeto
-Esta API REST foi desenvolvida utilizando **Spring Boot**, com o objetivo de gerenciar um sistema acadêmico completo, permitindo o gerenciamento de alunos, professores, disciplinas e matrículas.
-
-A aplicação permite operações completas de CRUD (Create, Read, Update e Delete), além de regras de negócio relacionadas ao controle de matrículas acadêmicas, seguindo boas práticas de desenvolvimento como arquitetura em camadas e separação de responsabilidades.
-
+API REST desenvolvida em **Java 21** e **Spring Boot 4**, voltada ao gerenciamento de informações acadêmicas. Possui operações CRUD para alunos, professores e disciplinas, gerenciamento de matrículas, controle de acesso com autenticação **JWT (JSON Web Token)**, criptografia de senhas com **BCrypt**, migrações com **Flyway** e documentação interativa com **Swagger OpenAPI**.
 
 ---
 
-## 🧠 Arquitetura do Projeto
+## 🚀 Acesso Rápido à Documentação (Swagger UI)
 
-O projeto foi estruturado em camadas:
+Com a aplicação em execução, acesse a documentação interativa para visualizar e testar os endpoints diretamente pelo navegador:
 
+👉 **[Swagger UI](http://localhost:8080/swagger-ui/index.html)**
+
+**Especificação OpenAPI (JSON):** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+---
+
+## 🔐 Como se autenticar no Swagger
+
+A API utiliza autenticação Stateless via JWT para proteger as rotas de gerenciamento acadêmico.
+
+Para testar os endpoints protegidos:
+
+1. Acesse o endpoint **`POST /cadastros`** no Swagger para cadastrar um usuário.
+2. Informe um login e uma senha de sua preferência:
+
+   ```json
+   {
+     "login": "seu_usuario",
+     "senha": "sua_senha"
+   }
+   ```
+
+3. Após o cadastro, acesse **`POST /login`** e informe as mesmas credenciais.
+4. Execute a requisição e copie o token JWT retornado no corpo da resposta.
+5. No topo da documentação Swagger, clique no botão **Authorize 🔓**.
+6. No campo **Value**, cole o token e confirme em **Authorize**.
+7. Pronto! Agora você poderá acessar as rotas protegidas utilizando o token gerado.
+
+> **Importante:** o token deve ser obtido por meio do endpoint de login. Não é necessário informar o prefixo `Bearer` no campo de autorização quando o Swagger já utiliza o esquema Bearer configurado na API.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Java 21** – Linguagem de programação.
+- **Spring Boot 4.0.4** – Estrutura principal da aplicação.
+- **Spring Security** – Configuração de segurança e controle de acesso.
+- **JWT (Auth0)** – Geração e validação de tokens de autenticação.
+- **BCrypt** – Criptografia de senhas.
+- **Spring Data JPA e Hibernate** – Persistência e mapeamento objeto-relacional.
+- **PostgreSQL 16** – Banco de dados relacional.
+- **Flyway** – Versionamento e gerenciamento de migrações do banco de dados.
+- **SpringDoc OpenAPI e Swagger UI** – Documentação e testes dos endpoints.
+- **Maven** – Gerenciamento de dependências e build do projeto.
+
+---
+
+## 📌 Principais pontos de extremidade
+
+### 🔑 Autenticação e Usuários
+
+Rotas públicas utilizadas para cadastro e autenticação.
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `POST` | `/cadastros` | Cadastra um novo usuário com senha protegida por BCrypt. |
+| `POST` | `/login` | Autentica o usuário e gera um token JWT. |
+
+### 👨‍🏫 Professores (Requer Token JWT)
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/professores` | Lista os professores cadastrados. |
+| `GET` | `/professores/{id}` | Consulta um professor específico. |
+| `POST` | `/professores` | Cadastra um novo professor. |
+| `PUT` | `/professores/{id}` | Atualiza os dados de um professor. |
+| `DELETE` | `/professores/{id}` | Remove um professor. |
+
+### 🎓 Alunos (Requer Token JWT)
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/alunos` | Lista os alunos cadastrados. |
+| `GET` | `/alunos/{id}` | Consulta um aluno específico. |
+| `POST` | `/alunos` | Cadastra um novo aluno. |
+| `PUT` | `/alunos/{id}` | Atualiza os dados de um aluno. |
+| `DELETE` | `/alunos/{id}` | Remove um aluno. |
+
+### 📚 Disciplinas (Requer Token JWT)
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/disciplinas` | Lista as disciplinas cadastradas. |
+| `GET` | `/disciplinas/{id}` | Consulta uma disciplina específica. |
+| `POST` | `/disciplinas` | Cadastra uma nova disciplina. |
+| `PUT` | `/disciplinas/{id}` | Atualiza os dados de uma disciplina. |
+| `DELETE` | `/disciplinas/{id}` | Remove uma disciplina. |
+
+### 📝 Matrículas (Requer Token JWT)
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `POST` | `/matriculas` | Realiza uma matrícula. |
+| `PATCH` | `/matriculas/trancar/{id}` | Realiza o trancamento de uma matrícula. |
+| `PATCH` | `/matriculas/atualizar-notas/{id}` | Atualiza as notas de uma matrícula. |
+
+---
+
+## ⚙️ Configuração e Execução
+
+### 1. Pré-requisitos
+
+- JDK 21 instalado e configurado.
+- PostgreSQL 16 instalado e em execução.
+- Maven (opcional, pois o projeto possui Maven Wrapper).
+
+Crie um banco de dados chamado:
+
+```sql
+CREATE DATABASE aluno_online;
 ```
-src/
-├── model/
-├── repository/
-├── service/
-├── controller/
-├── dtos/
-```
 
-* **Model** → Representa as entidades do sistema (Aluno, Professor, Disciplina e Matrícula)
-* **Repository** → Responsável pelo acesso ao banco de dados (JPA)
-* **Service** → Contém as regras de negócio
-* **Controller** → Responsável pelos endpoints da API
-*  **DTOs** → Objetos utilizados para transferência de dados entre cliente e API
+### 2. Configuração das variáveis de ambiente
 
----
+Antes de iniciar a aplicação, configure as variáveis de ambiente necessárias para a conexão com o banco de dados e para a assinatura dos tokens JWT.
 
-## ⚙️ Tecnologias Utilizadas
-
-* Java 21
-* Spring Boot
-* Spring Web
-* Spring Data JPA
-* PostgreSQL
-* DBeaver
-* Insomnia
-* Lombok
-
----
-
-## 🔄 CRUD Implementado
-
-### 👨‍🎓 Aluno
-
-| Método | Endpoint     | Descrição     |
-| ------ | ------------ | ------------- |
-| POST   | /alunos      | Criar aluno   |
-| GET    | /alunos      | Listar alunos |
-| GET    | /alunos/{id} | Buscar por ID |
-| PUT    | /alunos/{id} | Atualizar     |
-| DELETE | /alunos/{id} | Deletar       |
-
----
-
-### 👨‍🏫 Professor
-
-| Método | Endpoint          | Descrição          |
-| ------ | ----------------- | ------------------ |
-| POST   | /professores      | Criar professor    |
-| GET    | /professores      | Listar professores |
-| GET    | /professores/{id} | Buscar por ID      |
-| PUT    | /professores/{id} | Atualizar          |
-| DELETE | /professores/{id} | Deletar            |
-
----
-
-### 📚 Disciplina
-
-| Método | Endpoint          | Descrição          |
-| ------ | ----------------- | ------------------ |
-| POST   | /disciplinas      | Criar disciplina   |
-| GET    | /disciplinas      | Listar disciplinas |
-| GET    | /disciplinas/{id} | Buscar por ID      |
-| PUT    | /disciplinas/{id} | Atualizar          |
-| DELETE | /disciplinas/{id} | Deletar            |
-
----
-
-## 📝 Funcionalidades de Matrícula
-
-| Método | Endpoint                         | Descrição |
-| ------ | -------------------------------- | ---------- |
-| POST   | /matriculas                      | Criar matrícula |
-| PATCH  | /matriculas/trancar/{id}         | Trancar matrícula |
-| PATCH  | /matriculas/atualizar-notas/{id} | Atualizar notas |
-
----
-
-## 🧪 Testes com Insomnia
-
-A API foi testada utilizando o Insomnia para simular requisições HTTP.
-
-
-### 🔹 Criar aluno (POST)
-<img width="1918" height="1021" alt="image" src="https://github.com/user-attachments/assets/f673eb7f-555d-4d9b-8bf0-97f7b566ad43" />
-
-
-
-### 🔹 Listar alunos (GET)
-<img width="1918" height="1013" alt="image" src="https://github.com/user-attachments/assets/69579070-f01d-4ee5-a53f-93e7523576d6" />
-
-
-### 🔹 Buscar aluno por ID (GET)
-<img width="1917" height="997" alt="image" src="https://github.com/user-attachments/assets/1ad4bbe5-2bcd-4eda-9849-86f837e50057" />
-
-
-### 🔹 Atualizar aluno por ID (PUT)
-<img width="1918" height="1021" alt="image" src="https://github.com/user-attachments/assets/1d0eacd9-ae22-481c-90c1-79dfd7d63a69" />
-
-### 🔹 Deletar aluno por ID (DELETE)
-<img width="1918" height="1022" alt="image" src="https://github.com/user-attachments/assets/84fc442c-f24c-4a33-8b07-f047d094a0d4" />
-
-### 🔹 Criar professor (POST)
-<img width="1918" height="1017" alt="image" src="https://github.com/user-attachments/assets/b7407fc8-2433-40c2-81c3-cfd00341dd0f" />
-
-### 🔹 Listar professores (GET)
-<img width="1918" height="1013" alt="image" src="https://github.com/user-attachments/assets/567b25f6-30bb-4987-9999-d538ebc4e7f3" />
-
-### 🔹 Buscar professor por ID (GET)
-<img width="1918" height="1016" alt="image" src="https://github.com/user-attachments/assets/b6bd2c75-d10a-44c4-8545-c39990763a76" />
-
-### 🔹 Atualizar professor por ID (PUT)
-<img width="1918" height="1018" alt="image" src="https://github.com/user-attachments/assets/1249ab94-3cc6-4e31-ab5d-9cbcc33091ae" />
-
-### 🔹 Deletar professor por ID (DELETE)
-<img width="1918" height="1018" alt="image" src="https://github.com/user-attachments/assets/aa750c44-0be6-461a-a574-5abbb509587c" />
-
-### 🔹 Criar Disciplina (POST)
-<img width="1600" height="798" alt="image" src="https://github.com/user-attachments/assets/cd4bdf13-f9d7-441e-80cc-5fffdd903449" />
-
-### 🔹 Listar todas as Disciplinas (GET)
-<img width="1600" height="797" alt="image" src="https://github.com/user-attachments/assets/dbcab198-4135-46eb-bf9e-d96661bebc64" />
-
-### 🔹 Buscar Disciplina por ID (GET)
-<img width="1600" height="790" alt="image" src="https://github.com/user-attachments/assets/d957d178-631f-4128-a00e-a19c8a2266d8" />
-
-### 🔹 Atualizar Disciplina por ID (PUT)
-<img width="1600" height="792" alt="image" src="https://github.com/user-attachments/assets/32ae286c-6031-4edc-a129-aefa0fc1d2ab" />
-
-### 🔹 Deletar Disciplina por ID (DELETE)
-<img width="1600" height="794" alt="image" src="https://github.com/user-attachments/assets/07505dd0-3430-4a3f-acfa-da517e616e68" />
-
-### 🔹 Criar Matrícula (POST)
-<img width="1600" height="792" alt="image" src="https://github.com/user-attachments/assets/cc604e3a-63d8-4744-aaa7-db94def133ae" />
-
-### 🔹 Trancar Matrícula (PATCH)
-<img width="1600" height="789" alt="image" src="https://github.com/user-attachments/assets/e4fce5b6-b404-4e41-966c-64c7c64c6e17" />
-
-### 🔹 Atualizar notas (PATCH)
-<img width="1600" height="789" alt="image" src="https://github.com/user-attachments/assets/343e83c9-e29f-47fd-8d28-cf907845c09e" />
-
----
-
-## 🗄️ Banco de Dados
-
-Foi utilizado o **PostgreSQL** como banco de dados, com gerenciamento pelo DBeaver.
-
-### 🔹 Tabela Aluno
-<img width="1600" height="849" alt="image" src="https://github.com/user-attachments/assets/627279e6-2754-4dcf-a1a4-99a7b158cd84" />
-
-
-### 🔹 Tabela Professor
-<img width="1600" height="848" alt="image" src="https://github.com/user-attachments/assets/220cfda4-29a9-4ce0-ae5c-90e617074b5e" />
-
-
-### 🔹 Tabela Disciplina
-<img width="1600" height="845" alt="image" src="https://github.com/user-attachments/assets/b8256587-73ec-46c8-aaed-2bf4b9d832b2" />
-
-### 🔹 Tabela matricula_aluno
-<img width="1600" height="846" alt="image" src="https://github.com/user-attachments/assets/cae66cd8-8709-477d-b51b-fcec90de044f" />
-
-
----
-
-## 🔐 Segurança, cadastro e autenticação
-
-A API usa Spring Security stateless com JWT (Auth0 `java-jwt`), senhas BCrypt e documentação OpenAPI/Swagger.
-
-### Banco e execução
-
-Requisitos: Java 21 e PostgreSQL. Crie um banco chamado `aluno_online` (ou informe outro pela variável `DB_URL`). A configuração padrão local é `jdbc:postgresql://localhost:5432/aluno_online`, usuário `postgres` e senha `postgres`. Personalize sem gravar credenciais no repositório:
+No PowerShell:
 
 ```powershell
 $env:DB_URL = "jdbc:postgresql://localhost:5432/aluno_online"
 $env:DB_USERNAME = "postgres"
-$env:DB_PASSWORD = "sua-senha"
-$env:JWT_SECRET = "use-um-segredo-aleatorio-com-pelo-menos-32-bytes"
-./mvnw spring-boot:run
+$env:DB_PASSWORD = "sua_senha"
+$env:JWT_SECRET = "sua-chave-secreta-com-pelo-menos-32-caracteres"
 ```
 
-O Flyway está configurado com `baseline-on-migrate=true` e versão de baseline `0`. Assim, ao iniciar em um schema `public` preexistente sem histórico Flyway, registra o baseline `0` e executa `V1__create_usuario.sql`. A migration usa `CREATE TABLE IF NOT EXISTS`, preservando a tabela caso `usuario` já exista. As tabelas preexistentes dos CRUDs continuam sendo mantidas pelo Hibernate (`ddl-auto=update`). O valor padrão de `JWT_SECRET` serve apenas para desenvolvimento local e deve ser substituído em qualquer ambiente compartilhado.
+Substitua os valores pelos dados do seu ambiente local. Não compartilhe suas credenciais nem envie chaves secretas ao repositório.
 
-### Endpoints de autenticação
+### 3. Executar a aplicação
 
-| Método | Endpoint | Corpo JSON | Resultado |
-| --- | --- | --- | --- |
-| POST | `/cadastros` | `{"login":"aluno","senha":"senha-segura"}` | 201; grava senha BCrypt e atribui somente `ROLE_USER` |
-| POST | `/login` | `{"login":"aluno","senha":"senha-segura"}` | JWT com validade de 2 horas |
-
-As demais rotas (`/alunos`, `/professores`, `/disciplinas`, `/matriculas`) exigem `Authorization: Bearer <token>`.
-
-### Swagger com JWT
-
-Execute a API e abra [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html). Faça `POST /cadastros`, depois `POST /login`, copie o valor `token` da resposta, clique em **Authorize**, cole o token (o esquema HTTP Bearer adiciona o prefixo) e confirme. As operações protegidas podem então ser executadas pela interface.
-
-### Testes
+Na pasta raiz do projeto, execute:
 
 ```powershell
-./mvnw test
+.\mvnw.cmd spring-boot:run
 ```
 
-O contexto da aplicação requer PostgreSQL acessível e configurado pelas variáveis acima.
+A aplicação será iniciada na porta `8080`.
 
-## ⚙️ Como Executar o Projeto
+### 4. Build do projeto
 
-1. Clonar o repositório:
+Para compilar o projeto e executar as verificações:
 
-```
-git clone https://github.com/mgabrielegoncalves/aluno-online-api.git
-```
- 2. Abrir o projeto em uma IDE (IntelliJ, Eclipse)
- 
- 3. Configurar o banco de dados PostgreSQL no arquivo `application.properties`
-
- 4. Executar a classe `ApiApplication`
-
- 5. A API estará disponível em:
-
-```
-http://localhost:8080
+```powershell
+.\mvnw.cmd clean package
 ```
 
----
-
-## 📊 Detalhamento do Código
-
-* Os **Controllers** recebem as requisições HTTP e direcionam para os serviços;
-* Os **Services** processam as regras de negócio da aplicação;
-* Os **Repositories** fazem a comunicação com o banco de dados utilizando Spring Data JPA;
-* As **Entities (Model)** representam as tabelas do banco de dados;
-* Os **DTOs** são utilizados para transferência de dados específicos entre cliente e API;
-* O projeto utiliza **Derived Query** para criação de consultas personalizadas através da nomenclatura dos métodos no Repository;
-* As regras de matrícula utilizam **Enum** para controle de status acadêmico.
----
-
-## 👩‍💻 Autora
-
-Maria Gabriele Araújo Gonçalves
-
----
-
-## 📌 Status
-
-✅ Projeto finalizado e funcional
+O arquivo `.jar` será gerado no diretório `target/`.
